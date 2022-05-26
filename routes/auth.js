@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User')
 const Joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 const schemaRegister = Joi.object({
     name: Joi.string().min(6).max(255).required(),
@@ -29,7 +30,7 @@ router.post('/register', async (req, res) => {
     const isEmailExist = await User.findOne({ email: req.body.email });
     if (isEmailExist) {
         return res.status(400).json(
-            { error: 'Email registered' }
+            { error: 'Email already registered' }
         )
     }
 
@@ -47,7 +48,7 @@ router.post('/register', async (req, res) => {
         const savedUser = await user.save();
         res.json({
             error: null,
-            data: savedUser
+            data: {message: "User registered", savedUser}
         })
     } catch (error) {
         res.status(400).json({ error })
@@ -66,10 +67,10 @@ router.post('/login', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).json({ error: 'Invalid password' })
     
-    res.json({
+    /*res.json({
         error: null,
         data: 'Success'
-    })
+    })*/
 
     // Creación del token
     const token = jwt.sign({
@@ -79,7 +80,7 @@ router.post('/login', async (req, res) => {
     
     res.header('auth-token', token).json({
         error: null,
-        data: {token}
+        data: {token, user: user.email}
     })
 })
 
