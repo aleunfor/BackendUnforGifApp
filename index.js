@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 require('dotenv').config()
 
-const dashboadRoutes = require('./routes/dashboard');
+const favRoutes = require('./routes/fav');
 const verifyToken = require('./routes/validate-token');
 
 const app = express();
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
     })
 });
 app.use('/api/user', authRoutes);
-app.use('/api/dashboard', verifyToken, dashboadRoutes);
+app.use('/api/fav', verifyToken, favRoutes);
 
 // iniciar server
 const PORT = process.env.PORT || 3001;
