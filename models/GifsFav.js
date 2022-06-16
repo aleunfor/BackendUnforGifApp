@@ -7,6 +7,12 @@ const favSchema = mongoose.Schema({
         minlength: 6,
         maxlength: 255
     },
+    title:{
+        type: String,
+        required: true,
+        minlength: 6,
+        maxlength: 255
+    },
     user: {
         type: String,
         required: true,
