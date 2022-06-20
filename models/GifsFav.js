@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const favSchema = mongoose.Schema({
-    idFav: {
+    id: {
         type: String,
         required: true,
         minlength: 6,

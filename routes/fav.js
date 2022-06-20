@@ -18,7 +18,7 @@ router.post('/add/:id/:title/:user', async (req, res) => {
     }
 
     const fav = new Fav({
-        idFav: req.params.id,
+        id: req.params.id,
         title: req.params.title,
         user: req.params.user
     });
@@ -32,7 +32,7 @@ router.post('/add/:id/:title/:user', async (req, res) => {
                 res.status(400).json({ error: 'Favorites not found' });
             } else {
                 for (var i in data) {
-                    favs.push(data[i].idFav);
+                    favs.push(data[i].id);
                 }
                 res.send({
                     "favs": favs
@@ -54,7 +54,7 @@ router.get('/getfavs/:user', async (req, res) => {
             res.status(400).json({ error: 'Favorites not found' });
         } else {
             for (var i in data) {
-                favs.push(data[i].idFav);
+                favs.push(data[i].id);
             }
             res.send({
                 "favs": favs
@@ -65,12 +65,28 @@ router.get('/getfavs/:user', async (req, res) => {
 
 })
 
+router.get('/getallfavs/:user', async (req, res) => {
+    const user = req.params.user
+
+    const getFavs = await Fav.find({ user }, function (err, data) {
+        if (err) {
+            res.status(400).json({ error: 'Favorites not found' });
+        } else {
+            res.send({
+                "favs": data
+            })
+        }
+    }).clone().catch(function (err) { console.log(err) });
+    return getFavs
+
+})
+
 router.post('/removefav/:id/:user', async (req, res) => {
-    const idFav = req.params.id
+    const id = req.params.id
     const user = req.params.user
     const favs = []
 
-    const removeFav = await Fav.deleteOne({ idFav }, function (err, data) {
+    const removeFav = await Fav.deleteOne({ id, user }, function (err, data) {
         if (err) {
             res.status(400).json({ error: 'Couldnt delete this gif from favorites' });
         } else {
@@ -79,7 +95,7 @@ router.post('/removefav/:id/:user', async (req, res) => {
                     res.status(400).json({ error: 'Favorites not found' });
                 } else {
                     for (var i in data) {
-                        favs.push(data[i].idFav);
+                        favs.push(data[i].id);
                     }
                     res.send({
                         "favs": favs
