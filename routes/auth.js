@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
     const isEmailExist = await User.findOne({ email: req.body.email });
     if (isEmailExist) {
         return res.status(400).json(
-            { error: 'Email already registered' }
+            { data: 'Email already registered' }
         )
     }
 
@@ -62,10 +62,10 @@ router.post('/login', async (req, res) => {
     if (error) return res.status(400).json({ error: error.details[0].message })
     
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).json({ error: 'User not found' });
+    if (!user) return res.status(400).json({ data: 'User not found' });
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).json({ error: 'Invalid password' })
+    if (!validPassword) return res.status(400).json({ data: 'Invalid password' })
     
     /*res.json({
         error: null,
