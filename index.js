@@ -15,7 +15,7 @@ app.use(bodyparser.json());
 // cors
 const cors = require('cors');
 var corsOptions = {
-    origin: 'http://localhost:3000', // Reemplazar con dominio
+    origin: 'https://unforgif.vercel.app', // Reemplazar con dominio
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
